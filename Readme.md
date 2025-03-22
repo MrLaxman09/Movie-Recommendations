@@ -6,3 +6,14 @@ Here Mainly Three Freshers Work:-
 2) Backend
 3) API Integrator
 4) Local Database Retriver.
+
+Outline The Functionalities And Non-Functionalities Requirements
+
+.
+.
+.
+.
+.
+.
+.
+.
