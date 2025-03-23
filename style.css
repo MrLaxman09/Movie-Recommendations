@@ -107,6 +107,6 @@ footer {
 
 @media (max-width: 480px) {
     #movies {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
 }
