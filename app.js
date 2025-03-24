@@ -2,6 +2,7 @@ const API_KEY = '4d182e89';
 const SEARCH_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&s=`;
 const moviesContainer = document.getElementById('movies');
 const searchInput = document.getElementById('search');
+const form = document.getElementById('form')
 const favoritesButton = document.getElementById('favorites');
 
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -42,7 +43,7 @@ async function fetchMovies(query) {
 async function fetchDefaultMovies() {
     moviesContainer.innerHTML = '<p>Loading movies...</p>'; // UX ke liye loading text
 
-    let defaultQuery = "Bollywood"; // Default movies ka keyword
+    let defaultQuery = "tech"; // Default movies ka keyword
     let moviesWithDetails = [];
     let page = 1;
     let hasMore = true;
@@ -91,21 +92,28 @@ function displayMovies(movies) {
         // Movie pe click karne se naye page pe le jayega
         movieCard.addEventListener("click", () => {
             localStorage.setItem("selectedMovie", JSON.stringify(movie));
-            window.location.href = "movie.html"; // Naya page open karega
+            window.location.reload();
         });
         
         moviesContainer.appendChild(movieCard);
     });
 }
 
-searchInput.addEventListener('input', () => {
-    const searchTerm = searchInput.value.trim();
-    if (searchTerm !== '') {
-        fetchMovies(searchTerm);
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    const searchTerm = search.value
+
+    if(searchTerm && searchTerm !== '') {
+        fetchMovies(searchTerm)
+
+        search.value = ''
     } else {
-        moviesContainer.innerHTML = '<p>Type a movie name to search...</p>';
+        window.location.reload()
     }
-});
+
+})
+
 
 function toggleFavorite(id, title, poster, rating) {
     const index = favorites.findIndex(movie => movie.id === id);
@@ -116,6 +124,14 @@ function toggleFavorite(id, title, poster, rating) {
     }
     localStorage.setItem('favorites', JSON.stringify(favorites));
 }
+//remove favorites
+function removeFavorite(id) {
+    const index = favorites.findIndex(movie => movie.id === id);
+    favorites.splice(index, 1);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+
 
 favoritesButton.addEventListener('click', () => {
     moviesContainer.innerHTML = '';
@@ -130,7 +146,10 @@ favoritesButton.addEventListener('click', () => {
             <img src="${movie.poster}" alt="${movie.title}">
             <h3>${movie.title}</h3>
             <p>⭐ ${movie.rating}</p>
+            
+            <button class="fav-btn" onclick="removeFavorite('${movie.id}')">❌</button>
         `;
         moviesContainer.appendChild(movieCard);
+        
     });
 });
